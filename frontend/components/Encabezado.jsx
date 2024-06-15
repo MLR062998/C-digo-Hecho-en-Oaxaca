@@ -1,7 +1,17 @@
 // Encabezado.js
-import React from 'react';
+import React, { useState } from 'react';
 
 const Encabezado = () => {
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setMenuVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setMenuVisible(false);
+  };
+
   return (
     <div style={{ 
       backgroundColor: "black", 
@@ -11,17 +21,66 @@ const Encabezado = () => {
       alignItems: "center", 
       padding: "20px" 
     }}>
-      <button style={{ 
-        backgroundColor: "White", 
-        color: "Black", 
-        border: "none", 
-        padding: "10px 20px", 
-        cursor: "pointer", 
-        fontSize: "1em", 
-        borderRadius: "10px" 
-      }}>
-        Menú
-      </button>
+      <div 
+        onMouseEnter={handleMouseEnter} 
+        onMouseLeave={handleMouseLeave} 
+        style={{ position: "relative" }}
+      >
+        <button style={{ 
+          backgroundColor: "White", 
+          color: "Black", 
+          border: "none", 
+          padding: "10px 20px", 
+          cursor: "pointer", 
+          fontSize: "1em", 
+          borderRadius: "10px" 
+        }}>
+          Menú
+        </button>
+        {menuVisible && (
+          <div style={{
+            position: "absolute",
+            top: "100%",
+            left: "0",
+            backgroundColor: "white",
+            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+            borderRadius: "5px",
+            overflow: "hidden",
+            zIndex: 1
+          }}>
+            <button style={{ 
+              padding: "10px 20px", 
+              width: "100%", 
+              textAlign: "left", 
+              border: "none", 
+              backgroundColor: "black", 
+              cursor: "pointer"
+            }}>
+              Textiles
+            </button>
+            <button style={{ 
+              padding: "10px 20px", 
+              width: "100%", 
+              textAlign: "left", 
+              border: "none", 
+              backgroundColor: "black", 
+              cursor: "pointer"
+            }}>
+              Dulces Tradicionales
+            </button>
+            <button style={{ 
+              padding: "10px 20px", 
+              width: "100%", 
+              textAlign: "left", 
+              border: "none", 
+              backgroundColor: "black", 
+              cursor: "pointer"
+            }}>
+              Artesanías
+            </button>
+          </div>
+        )}
+      </div>
       <h1 style={{ 
         margin: "0 auto", 
         fontSize: "2.5em", 
