@@ -214,7 +214,7 @@ type IndiceProd = Nat;
 public func pagoProductos(id:Text):async Text {
     let event: ?Productos = productos.get(id);
     if (event != null) {
-      return "Pago realizado correctamentes";
+      return "Pago realizado correctamente";
     } else {
       return "Pago no realizado por indice invalido";
     }
