@@ -1,4 +1,3 @@
-// Componente para crear productos
 import React, { useState } from "react";
 import { useCanister } from '@connect2ic/react';
 import ActualizarProductos from './ActualizarProductos';
@@ -10,18 +9,18 @@ function CrearProducto() {
   const [reservacion, setReservacion] = useState("");
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
-  
+
   const [Dulctradic] = useCanister("dulcesTradicionales");
   const [Productos, setProductos] = useState([]);
 
   const handleBuscarProd = async () => {
     try {
       const result = await Dulctradic.buscarProductos();
-      setProductos(result.sort((a, b) => parseInt(a[0]) - parseInt(b[0]))); // Ordenar productos por ID
+      setProductos(result.sort((a, b) => parseInt(a[0]) - parseInt(b[0]))); // Ordenar posts por ID
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const handleCrearProd = async (e) => {
     e.preventDefault();
@@ -41,75 +40,91 @@ function CrearProducto() {
   };
 
   return (
-    <div>
-      <div>
+    <div className="container">
+      <div className="crear-producto">
         <h2>Crear Nuevo Producto</h2>
         <form onSubmit={handleCrearProd}>
-          <label>Nombre</label>
-          <input
-            type="text"
-            placeholder="Nombre"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-          
-          <label>Descripción</label>
-          <input
-            type="text"
-            placeholder="Descripción"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-          />
-          
-          <label>Precio</label>
-          <input
-            type="text"
-            placeholder="Precio"
-            value={precio}
-            onChange={(e) => setPrecio(e.target.value)}
-          />
-          
-          <label>Reservación</label>
-          <input
-            type="text"
-            placeholder="Reservación"
-            value={reservacion}
-            onChange={(e) => setReservacion(e.target.value)}
-          />
-          
-          <label>Fecha</label>
-          <input
-            type="text"
-            placeholder="Fecha"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
-          />
-          
-          <label>Hora</label>
-          <input
-            type="text"
-            placeholder="Hora"
-            value={hora}
-            onChange={(e) => setHora(e.target.value)}
-          />
-          
-          <button type="submit">Crear Producto</button>
+          <div className="form-group">
+            <label>Nombre:</label>
+            <input
+              type="text"
+              placeholder="Nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Descripción:</label>
+            <input
+              type="text"
+              placeholder="Descripción"
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Precio:</label>
+            <input
+              type="text"
+              placeholder="Precio"
+              value={precio}
+              onChange={(e) => setPrecio(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Reservación:</label>
+            <input
+              type="text"
+              placeholder="Disponibles"
+              value={reservacion}
+              onChange={(e) => setReservacion(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Fecha:</label>
+            <input
+              type="text"
+              placeholder="Fecha de creacion"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <div className="form-group">
+            <label>Hora:</label>
+            <input
+              type="text"
+              placeholder="ID"
+              value={hora}
+              onChange={(e) => setHora(e.target.value)}
+              className="form-control"
+            />
+          </div>
+          <button type="submit" className="btn btn-primary">
+            Crear Producto
+          </button>
         </form>
       </div>
-      
-      <div>
+      <div className="lista-productos">
         <h3>Lista de Servicios</h3>
-        <button onClick={handleBuscarProd}>Buscar Servicios</button>
         <ul>
-          {Productos.map((Producto) => (
-            <li key={Producto}>
-              <ActualizarProductos Producto={Producto} refresh={handleBuscarProd} />
+          <button onClick={handleBuscarProd}>Buscar Servicios</button>
+          {Productos.map((producto) => (
+            <li key={producto.id}>
+              <h3>{producto.nombre}</h3>
+              <p>{producto.descripcion}</p>
+              <p>Precio: {producto.precio}</p>
+              <ActualizarProductos Producto={producto} refresh={handleBuscarProd} />
             </li>
           ))}
         </ul>
       </div>
     </div>
   );
-}
+};
 
 export default CrearProducto;
