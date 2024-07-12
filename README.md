@@ -1,45 +1,26 @@
-<<<<<<< HEAD
-# Codigo-Hecho-en-Oaxaca
+Bienvenido al proyecto llamado "HECHO EN OAXACA"  
+El proyecto está hecho a base de una idea que el equipo ha desarrollado, mismo que consiste en un marketplace para la venta de productos artesanales la cual conlleva el uso de la web 3.0, es decir, la plataforma en la que hemos pensado y misma de la que se ha plasmado las ideas principales en este proyecto consiste en el uso de una wallet digital para el acceso de los usuarios en cualquier plataforma como es en la que hemos pensado.  
 
-=======
-Bienvenido a al  proyecto llamado "HECHO EN OAXACA"
+El siguiente sistema consiste en una plataforma online enfocada a la web 3.0 para ofrecer servicios para los artesanos en ellos puedan vender sus productos como lo son las artesanías, textiles y dulces. En donde los usuarios puedan comprar productos autentificados.  
 
-El proyecto está hecho a base de una idea que el equipo ha desarrollado, mismo que consiste en un marketplace para la venta de productos artesanales la cual conlleva el uso de la web 3.0, es decir, la plataforma en la que hemos pensado y misma de la que se ha plasmado las ideas principales en este proyecto consiste en el uso de una wallet digital para el acceso de los usuarios en cualquier plataforma como es en la que hemos pensado.
+Si desea probar su proyecto localmente, puede utilizar los siguientes comandos:  
+Inicia la réplica, ejecutándose en segundo plano.  
+`dfx start --background`  
+Instala las librerías necesarias.  
+`npm install`  
+Implementa sus contenedores en la réplica y genera su interfaz candid.  
+`dfx deploy`  
 
-El siguiente sistema consiste en una plataforma online enfocada a la web 3.0 para ofrecer servicios para los artesanos en ellos puedan vender sus productos como lo son las artesanias, textiles y dulces. En donde los usuarios puedan comprar productos autentificados. 
+Para obtener más información antes de comenzar a trabajar con conectando, consulte la siguiente documentación disponible en línea:  
 
-Si desea probar su proyecto localmente, puede utilizar los siguientes comandos:
-
-Inicia la réplica, ejecutándose en segundo plano.
-dfx start --background
-Instala las librerias necesarias.
-npm install
-Implementa sus contenedores en la réplica y genera su interfaz candid.
-dfx deploy
-Para obtener más información antes de comenzar a trabajar con conectando, consulte la siguiente documentación disponible en línea:
-
-# Inicio rápido
-[Herramientas de desarrollo SDK] (https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove)
-Guía del lenguaje de programación Motoko
-Referencia rápida del lenguaje Motoko
-Referencia de la API de JavaScript
-Si desea comenzar a trabajar en su proyecto de inmediato, puede probar los siguientes comandos:
-
-Estar en la raiz del proyecto(codigoHechoenOaxaca)
-dfx help
-dfx canister --help
-Ejecutando el proyecto localmente
-Si desea probar su proyecto localmente, puede utilizar los siguientes comandos:
-
-# Inicia la réplica, ejecutándose en segundo plano.
-dfx start --background
-
-# Implementa tus contenedores en la réplica y genera tu interfaz sincera
-dfx deploy
-Una vez que se complete el trabajo, su aplicación estará disponible en http://localhost:4943?canisterId={asset_canister_id}.
+Inicio rápido  
+[Herramientas de desarrollo SDK](https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove)  
+Guía del lenguaje de programación Motoko  
+Referencia rápida del lenguaje Motoko  
+Referencia de la API de JavaScript  
 # Clonar el proyecto
 
-https://github.com/MLR062998/Proyecto-Dulce-Tradici-n-.git
+https://github.com/MLR062998/C-digo-Hecho-en-Oaxaca.git
 # Ejecuta el comando para despliegue
 
 npm install
@@ -56,36 +37,51 @@ dfx start
 
 dfx build
 # Desplegar:
-dfx deploy
-npm run dev
+dfx deploy y npm run dev
 
-Si ha realizado cambios en su contenedor backend, puede generar una nueva interfaz sincera con
+`Si desea comenzar a trabajar en su proyecto de inmediato, puede probar los siguientes comandos:  
+Estar en la raíz del proyecto (codigoHechoenOaxaca)`  
+`dfx help`  
+`dfx canister --help`  
 
-npm run generate
-en cualquier momento. Esto se recomienda antes de iniciar el servidor de desarrollo frontend y se ejecutará automáticamente cada vez que ejecute dfx implementar.
+Ejecutando el proyecto localmente  
+Si desea probar su proyecto localmente, puede utilizar los siguientes comandos:  
 
-Si está realizando cambios en la interfaz, puede iniciar un servidor de desarrollo con
+# Inicia la réplica, ejecutándose en segundo plano.  
+`dfx start --background`
 
-npm start
-Lo que iniciará un servidor en http://localhost:8080, enviando solicitudes de API a la réplica en el puerto 4943.
+# Implementa tus contenedores en la réplica y genera tu interfaz sincera  
+`dfx deploy`  
+Una vez que se complete el trabajo, su aplicación estará disponible en `http://localhost:4943?canisterId={asset_canister_id}`.  
 
-Nota sobre las variables de entorno del frontend
-Si aloja código de interfaz en algún lugar sin utilizar DFX, es posible que deba realizar uno de los siguientes ajustes para garantizar que su proyecto no obtenga la clave raíz en producción:
+Si ha realizado cambios en su contenedor backend, puede generar una nueva interfaz sincera con  
+`npm run generate`  
+en cualquier momento. Esto se recomienda antes de iniciar el servidor de desarrollo frontend y se ejecutará automáticamente cada vez que ejecute `dfx deploy`.
 
-establezca DFX_NETWORK en ic si está utilizando Webpack
-utilice su propio método preferido para reemplazar process.env.DFX_NETWORK en las declaraciones generadas automáticamente
-Configurar contenedores -> {asset_canister_id} -> declaraciones -> env_override en una cadena en dfx.json reemplazará process.env.DFX_NETWORK con la cadena en las declaraciones generadas automáticamente
-Escribe tu propio constructor createActor
-Important
+Si está realizando cambios en la interfaz, puede iniciar un servidor de desarrollo con  
+`npm start`  
+Lo que iniciará un servidor en `http://localhost:8080`, enviando solicitudes de API a la réplica en el puerto 4943.  
 
-Para el correcto funcionamiento de la plataforma en desarrollo es necesario Instalar estas librerias:
+Nota sobre las variables de entorno del frontend  
+Si aloja código de interfaz en algún lugar sin utilizar DFX, es posible que deba realizar uno de los siguientes ajustes para garantizar que su proyecto no obtenga la clave raíz en producción:  
 
-*npm install react-router-dom
-*npm install react react-dom
-#npm install reactstrap
-#npm install react-modal
-#npm install react-icons
-#npm install bootstrap
-#npm install style-loader css-loader --save-dev
-#npm install styled-components
+- Establezca `DFX_NETWORK` en `ic` si está utilizando Webpack.  
+- Utilice su propio método preferido para reemplazar `process.env.DFX_NETWORK` en las declaraciones generadas automáticamente.  
+- Configurar contenedores -> `{asset_canister_id}` -> declaraciones -> `env_override` en una cadena en `dfx.json` reemplazará `process.env.DFX_NETWORK` con la cadena en las declaraciones generadas automáticamente.  
+- Escribe tu propio constructor `createActor`.  
+
+## Important
+Para el correcto funcionamiento de la plataforma en desarrollo es necesario instalar estas librerías:  
+`npm install react-router-dom`  
+`npm install react react-dom`  
+`npm install reactstrap`  
+`npm install react-modal`  
+`npm install react-icons`  
+`npm install bootstrap`  
+`npm install style-loader css-loader --save-dev`  
+`npm install styled-components`
+
+## Tecnologías utilizadas
+Los lenguajes con los que se desarrollo es haciendo uso de Motoko y React.
+
 
