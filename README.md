@@ -59,13 +59,13 @@ Important
 
 Para el correcto funcionamiento de la plataforma en desarrollo es necesario Instalar estas librerias:
 
-npm install react-router-dom
-npm install react react-dom
-npm install reactstrap
-npm install react-modal
-npm install react-icons
-npm install bootstrap
-npm install style-loader css-loader --save-dev
-npm install styled-components
+#npm install react-router-dom
+#npm install react react-dom
+#npm install reactstrap
+#npm install react-modal
+#npm install react-icons
+#npm install bootstrap
+#npm install style-loader css-loader --save-dev
+#npm install styled-components
 # Tecnologías utilizadas
 Los lenjuajes con los que se desarrollo es haciendo uso de Motoko y React.
