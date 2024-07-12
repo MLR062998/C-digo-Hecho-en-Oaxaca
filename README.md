@@ -1,6 +1,6 @@
 <<<<<<< HEAD
-# C-digo-Hecho-en-Oaxaca
-Repositorio de código
+# Codigo-Hecho-en-Oaxaca
+
 =======
 Bienvenido a al  proyecto llamado "HECHO EN OAXACA"
 
@@ -67,3 +67,5 @@ npm install react-icons
 npm install bootstrap
 npm install style-loader css-loader --save-dev
 npm install styled-components
+# Tecnologías utilizadas
+Los lenjuajes con los que se desarrollo es haciendo uso de Motoko y React.
