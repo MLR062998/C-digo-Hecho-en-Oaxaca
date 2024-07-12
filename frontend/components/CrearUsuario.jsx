@@ -1,97 +1,95 @@
-// Componente para crear usuarios
 import React, { useState } from "react";
-import { useCanister } from '@connect2ic/react';
-import ActualizarUsuario from "./ActualizarUsuario";
+import { useCanister } from "@connect2ic/react";
 
-function CrearUsuario (){
-  const [nombreu, setNombre] = useState("");
-  const [primerapellido, setPrimerapellido] = useState("");
-  const [segundoapellido, setSegundoapellido] = useState("");
+const CrearUsuario = ({ onUsuarioCreado }) => {
+  const [dulcestradicionalesCanister] = useCanister("dulcestradicionalesCanister");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [canalesS, setCanalesS] = useState("");
   const [direccion, setDireccion] = useState("");
-  const [tipo, setTipo] = useState("");
+  const [loading, setLoading] = useState("");
 
-  const [dulcestradicionalesCanister] = useCanister("dulcesTradicionales");
-  const [Usuarios, setUsuarios] = useState([]);
-
-  const handleBuscarUsr = async () => {
-    try {
-      const result = await dulcestradicionalesCanister.buscarUsuarios();
-      setUsuarios(result.sort((a, b) => parseInt(a[0]) - parseInt(b[0])));  // Ordenar posts por ID
-
-    } catch(e) {
-        console.log(e);
-    }
-  }
-
-  const handleCrearUsuario = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-        try{
-            const result = await dulcestradicionalesCanister.crearUsuarios(
-                nombreu,
-                primerapellido,
-                segundoapellido,
-                telefono,
-                canalesS,
-                direccion,
-                tipo)
-            console.log(result)
-        }catch(error){
-            console.error(error)
-        }
-  }
-
+    setLoading("Loading...");
+    try {
+      await dulcestradicionalesCanister.crearUsuario({
+        nombre,
+        apellido,
+        email,
+        telefono,
+        direccion
+      });
+      setLoading("Done");
+      onUsuarioCreado(); // Llamar al callback para notificar que se ha creado un nuevo usuario
+    } catch (error) {
+      console.error("Error al crear usuario:", error);
+      setLoading("Error");
+    }
+  };
 
   return (
-    <div>
-      <div>
-      
-      <form onSubmit={handleCrearUsuario}>
-      <h2>Crear Nuevo Usuario</h2>
-      <label>
-          Nombre
-        </label>
-        <input type="text" placeholder="Nombre" value={nombreu} onChange={(e) => setNombre(e.target.value)}/>
-        <label>
-          Primer Apellido
-        </label>
-        <input type="text" placeholder="Primer Apellido" value={primerapellido} onChange={(e) => setPrimerapellido(e.target.value)}/>
-        <label>
-          Segundo Apellido
-        </label>
-        <input type="text" placeholder="Segundo Apellido" value={segundoapellido} onChange={(e) => setSegundoapellido(e.target.value)}/>
-        <label>
-          Telefono
-        </label>
-        <input type="text" placeholder="Telefono" value={telefono} onChange={(e) => setTelefono(e.target.value)}/>
-        <label>
-          Red Social
-        </label>
-        <input type="text" placeholder="Red Social" value={canalesS} onChange={(e) => setCanalesS(e.target.value)}/>
-        <label>
-          Direccion
-        </label>
-        <input type="text" placeholder="Direccion" value={direccion} onChange={(e) => setDireccion(e.target.value)}/>
-        <label>
-          Tipo
-        </label>
-        <input type="text" placeholder="Tipo" value={tipo} onChange={(e) => setTipo(e.target.value)}/>
-        
-        <button type="submit">Crear Usuario</button>
+    <div className="flex items-center justify-center flex-col p-4 w-full">
+      <h1 className="h1 text-center border-b border-gray-500 pb-2">Crear Usuario</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center border mt-4 border-gray-500 p-5 space-x-2 w-96">
+          <div className="flex flex-col space-y-2 w-full">
+            <label htmlFor="nombre">Nombre</label>
+            <input
+              id="nombre"
+              required
+              className="border border-gray-500 px-2"
+              type="text"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
+            <label htmlFor="apellido">Apellido</label>
+            <input
+              id="apellido"
+              required
+              className="border border-gray-500 px-2"
+              type="text"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+            />
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              required
+              className="border border-gray-500 px-2"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <label htmlFor="telefono">Teléfono</label>
+            <input
+              id="telefono"
+              required
+              className="border border-gray-500 px-2"
+              type="text"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+            />
+            <label htmlFor="direccion">Dirección</label>
+            <input
+              id="direccion"
+              required
+              className="border border-gray-500 px-2"
+              type="text"
+              value={direccion}
+              onChange={(e) => setDireccion(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="w-full p-2 rounded-sm bg-gray-950 hover:bg-gray-900 text-white text-lg font-bold"
+            >
+              Crear Usuario
+            </button>
+          </div>
+        </div>
       </form>
-      </div>
-      <div>
-      <h3>Lista de Usuarios</h3>
-      <ul>
-      <button  onClick={handleBuscarUsr}>Buscar Usuarios</button>
-        {Usuarios.map((Usuario) => (
-          <li key={Usuario}>
-            <ActualizarUsuario Usuario={Usuario}  refresh={handleBuscarUsr} />
-          </li>
-        ))}
-      </ul>
-    </div>
+      <p className="mx-2">{loading}</p>
     </div>
   );
 };

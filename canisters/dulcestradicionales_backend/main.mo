@@ -4,8 +4,7 @@ import Nat "mo:base/Nat";
 import D "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
-import { stable_store } from 'ic-cdk-solidity';
-import Principal "mo:base/Principal";
+import { stable_store, stable_restore } from "ic-cdk";
 
 // Backend del canister
 
@@ -38,11 +37,10 @@ actor dulcestradicionalesCanister {
     return ();
   };
 
-  public func buscarUsuarios () : async [(Text, Usuario)]{
+  public func buscarUsuarios () : async [(Text, Usuario)] {
     let userIter : Iter.Iter<(Text, Usuario)> = usuarios.entries();
     let userArray : [(Text, Usuario)] = Iter.toArray(userIter);
     return userArray;
-
   };
 
   public func buscarUsuariosid (id: Text) : async ?Usuario {
@@ -59,12 +57,11 @@ actor dulcestradicionalesCanister {
       };
       case (?currentuser) {
         let user: Usuario = {nombreu = nombreu; primerapellido = primerapellido; segundoapellido = segundoapellido; telefono = telefono; canalesS = canalesS; direccion = direccion; tipo = tipo};
-        usuarios.put(id,user);
+        usuarios.put(id, user);
         D.print("Ha sido actualizado el usuario con id: " # id);
         return true;
       };
     };
-
   };
 
   public func verificarCuentaUsuario(id:Text) : async Text {
@@ -92,45 +89,83 @@ actor dulcestradicionalesCanister {
 
 
   type Productos = {
-    nombre: Text;
+    nombreProducto: Text;
+    idProducto: Text;
     descripcion: Text;
     precio: Text;
-    reservacion: Text;
-    fecha: Text;
-    hora: Text;
+    nombreArtesano: Text;
+    imagen: [Nat8];
   };
 
   type IndiceProd = Nat;
   var indiceprod: IndiceProd = 0;
+  let productos = HashMap.HashMap<Text, Productos>(0, Text.equal, Text.hash);
 
   private func generateIEvent() : Nat {
     indiceprod += 1;
     return indiceprod;
   };
 
-  let productos = HashMap.HashMap<Text, Productos>(0, Text.equal, Text.hash);
-
-  public func crearProductos(nombre:Text, descripcion:Text, precio:Text, reservacion:Text, fecha:Text, hora:Text) : async () {
+  public func crearProductos(nombreProducto: Text, idProducto: Text, descripcion: Text, precio: Text, nombreArtesano: Text, imagen: [Nat8]) : async () {
     let postevent = {
-      nombre = nombre;
+      nombreProducto = nombreProducto;
+      idProducto = idProducto;
       descripcion = descripcion;
       precio = precio;
-      reservacion = reservacion;
-      fecha = fecha;
-      hora = hora;
+      nombreArtesano = nombreArtesano;
+      imagen = imagen;
     };
 
     let clave = Nat.toText(generateIEvent());
     productos.put(clave, postevent);
-    D.print("Nuevo Evento Creado: " # nombre);
+    D.print("Nuevo Producto Creado: " # nombreProducto);
 
     // Guardar los datos en la memoria estable
-    stable_store("productos", [
-      postevent,
-      //... otros productos...
-    ]);
+    stable_store([postevent]);
 
     return ();
   };
 
-  public func actualizarProductos(id : Text, nombre : Text, descripcion : Text, precio : Text, reservacion : Text, fecha : Text, hora
+  public func buscarProductos() : async [(Text, Productos)] {
+    let productIter: Iter.Iter<(Text, Productos)> = productos.entries();
+    let productArray: [(Text, Productos)] = Iter.toArray(productIter);
+    return productArray;
+  };
+
+  public func actualizarProductos(id: Text, nombreProducto: Text, descripcion: Text, precio: Text, nombreArtesano: Text, imagen: [Nat8]) : async Bool {
+    let producto: ?Productos = productos.get(id);
+
+    switch (producto) {
+      case (null) {
+        return false;
+      };
+      case (?currentProducto) {
+        let productoActualizado: Productos = {
+          nombreProducto = nombreProducto;
+          idProducto = idProducto;
+          descripcion = descripcion;
+          precio = precio;
+          nombreArtesano = nombreArtesano;
+          imagen = imagen;
+        };
+        productos.put(id, productoActualizado);
+        D.print("Producto actualizado con id: " # id);
+        return true;
+      };
+    };
+  };
+
+  public func eliminarProducto(id: Text) : async Bool {
+    let producto: ?Productos = productos.get(id);
+    switch (producto) {
+      case (null) {
+        return false;
+      };
+      case (_) {
+        ignore productos.remove(id);
+        D.print("Producto eliminado con id: " # id);
+        return true;
+      };
+    };
+  };
+};

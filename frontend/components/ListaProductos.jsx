@@ -1,23 +1,22 @@
-// Componente para mostrar la lista de productos
 import React, { useState, useEffect } from "react";
-import { social } from "../src/declarations/social"; // Importa los canisters
+import { useCanister } from "@connect2ic/react";
 
 const ListaProductos = () => {
+  const [dulcestradicionalesCanister] = useCanister("dulcestradicionalesCanister");
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
     const obtenerProductos = async () => {
       try {
-        const listaProductos = await social.dulcestradicionalesCanister.buscarProductos();
+        const listaProductos = await dulcestradicionalesCanister.buscarProductos();
         setProductos(listaProductos);
       } catch (error) {
         console.error("Error al obtener productos:", error);
-        // Lógica para manejar errores
       }
     };
 
     obtenerProductos();
-  }, []);
+  }, [dulcestradicionalesCanister]);
 
   return (
     <div>
@@ -25,7 +24,7 @@ const ListaProductos = () => {
       <ul>
         {productos.map((producto) => (
           <li key={producto[0]}>
-            Nombre: {producto[1].nombre}, Descripción: {producto[1].descripcion}
+            Nombre: {producto[1].nombreProducto}, Descripción: {producto[1].descripcion}
             {/* Mostrar otros detalles si es necesario */}
           </li>
         ))}

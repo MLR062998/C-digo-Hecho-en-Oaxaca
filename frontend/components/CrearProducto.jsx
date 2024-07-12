@@ -1,128 +1,114 @@
 import React, { useState } from "react";
-import { useCanister } from '@connect2ic/react';
-import ActualizarProductos from './ActualizarProductos';
+import { useCanister } from "@connect2ic/react";
+import { resizeImage, fileToCanisterBinaryStoreFormat } from "../utils/image";
+import { useDropzone } from "react-dropzone";
 
-function CrearProducto() {
-  const [nombre, setNombre] = useState("");
+const ImageMaxWidth = 2048;
+
+const CrearProducto = ({ onProductoCreado }) => {
+  const [dulcestradicionalesCanister] = useCanister("dulcestradicionalesCanister");
+  const [nombreProducto, setNombreProducto] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [precio, setPrecio] = useState("");
-  const [reservacion, setReservacion] = useState("");
-  const [fecha, setFecha] = useState("");
-  const [hora, setHora] = useState("");
+  const [nombreArtesano, setNombreArtesano] = useState("");
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState("");
 
-  const [Dulctradic] = useCanister("dulcesTradicionales");
-  const [Productos, setProductos] = useState([]);
+  const { getRootProps, getInputProps } = useDropzone({
+    maxFiles: 1,
+    accept: {
+      "image/png": [".png"],
+      "image/jpeg": [".jpg", ".jpeg"],
+    },
+    onDrop: async (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        try {
+          const firstFile = acceptedFiles[0];
+          const newFile = await resizeImage(firstFile, ImageMaxWidth);
+          setFile(newFile);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    },
+  });
 
-  const handleBuscarProd = async () => {
-    try {
-      const result = await Dulctradic.buscarProductos();
-      setProductos(result.sort((a, b) => parseInt(a[0]) - parseInt(b[0]))); // Ordenar posts por ID
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const handleCrearProd = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading("Loading...");
+
     try {
-      const result = await Dulctradic.crearProductos(
-        nombre,
+      const fileArray = await fileToCanisterBinaryStoreFormat(file);
+      await dulcestradicionalesCanister.crearProductos({
+        nombreProducto,
+        idProducto: "",
         descripcion,
         precio,
-        reservacion,
-        fecha,
-        hora
-      );
-      console.log(result);
-    } catch (e) {
-      console.error(e);
+        nombreArtesano,
+        imagen: fileArray,
+      });
+      setLoading("Done");
+      onProductoCreado(); // Llamar al callback para notificar que se ha creado un nuevo producto
+    } catch (error) {
+      console.error("Error al crear producto:", error);
+      setLoading("Error");
     }
   };
 
   return (
-    <div className="container">
-      <div className="crear-producto">
-        <h2>Crear Nuevo Producto</h2>
-        <form onSubmit={handleCrearProd}>
-          <div className="form-group">
-            <label>Nombre:</label>
+    <div className="flex items-center justify-center flex-col p-4 w-full">
+      <h1 className="h1 text-center border-b border-gray-500 pb-2">Crear Producto</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center border mt-4 border-gray-500 p-5 space-x-2 w-96">
+          <div className="flex flex-col space-y-2 w-full">
+            <label htmlFor="nombreProducto">Nombre del Producto</label>
             <input
+              id="nombreProducto"
+              required
+              className="border border-gray-500 px-2"
               type="text"
-              placeholder="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              className="form-control"
+              value={nombreProducto}
+              onChange={(e) => setNombreProducto(e.target.value)}
             />
-          </div>
-          <div className="form-group">
-            <label>Descripción:</label>
+            <label htmlFor="descripcion">Descripción</label>
             <input
+              id="descripcion"
+              required
+              className="border border-gray-500 px-2"
               type="text"
-              placeholder="Descripción"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
-              className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Precio:</label>
+            <label htmlFor="precio">Precio</label>
             <input
+              id="precio"
+              required
+              className="border border-gray-500 px-2"
               type="text"
-              placeholder="Precio"
               value={precio}
               onChange={(e) => setPrecio(e.target.value)}
-              className="form-control"
             />
-          </div>
-          <div className="form-group">
-            <label>Reservación:</label>
+            <label htmlFor="nombreArtesano">Nombre del Artesano</label>
             <input
+              id="nombreArtesano"
+              required
+              className="border border-gray-500 px-2"
               type="text"
-              placeholder="Disponibles"
-              value={reservacion}
-              onChange={(e) => setReservacion(e.target.value)}
-              className="form-control"
+              value={nombreArtesano}
+              onChange={(e) => setNombreArtesano(e.target.value)}
             />
+            <button className="w-full" {...getRootProps({ className: "dropzone" })}>
+              <p className="bg-gray-950 hover:bg-gray-900 text-white p-2">Seleccionar imagen</p>
+              <input required {...getInputProps()} />
+            </button>
+            <p className="mt-2 border-b border-gray-500">{file ? file.name : "No file selected"}</p>
+            <button type="submit" className="w-full p-2 rounded-sm bg-gray-950 hover:bg-gray-900 text-white text-lg font-bold">
+              Crear Producto
+            </button>
           </div>
-          <div className="form-group">
-            <label>Fecha:</label>
-            <input
-              type="text"
-              placeholder="Fecha de creacion"
-              value={fecha}
-              onChange={(e) => setFecha(e.target.value)}
-              className="form-control"
-            />
-          </div>
-          <div className="form-group">
-            <label>Hora:</label>
-            <input
-              type="text"
-              placeholder="ID"
-              value={hora}
-              onChange={(e) => setHora(e.target.value)}
-              className="form-control"
-            />
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Crear Producto
-          </button>
-        </form>
-      </div>
-      <div className="lista-productos">
-        <h3>Lista de Servicios</h3>
-        <ul>
-          <button onClick={handleBuscarProd}>Buscar Servicios</button>
-          {Productos.map((producto) => (
-            <li key={producto.id}>
-              <h3>{producto.nombre}</h3>
-              <p>{producto.descripcion}</p>
-              <p>Precio: {producto.precio}</p>
-              <ActualizarProductos Producto={producto} refresh={handleBuscarProd} />
-            </li>
-          ))}
-        </ul>
-      </div>
+        </div>
+      </form>
+      <p className="mx-2">{loading}</p>
     </div>
   );
 };
