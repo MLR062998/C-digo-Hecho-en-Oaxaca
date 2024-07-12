@@ -18,7 +18,7 @@ Implementa sus contenedores en la réplica y genera su interfaz candid.
 dfx deploy
 Para obtener más información antes de comenzar a trabajar con conectando, consulte la siguiente documentación disponible en línea:
 
-Inicio rápido
+# Inicio rápido
 [Herramientas de desarrollo SDK] (https://internetcomputer.org/docs/current/developer-docs/build/install-upgrade-remove)
 Guía del lenguaje de programación Motoko
 Referencia rápida del lenguaje Motoko
@@ -37,6 +37,27 @@ dfx start --background
 # Implementa tus contenedores en la réplica y genera tu interfaz sincera
 dfx deploy
 Una vez que se complete el trabajo, su aplicación estará disponible en http://localhost:4943?canisterId={asset_canister_id}.
+# Clonar el proyecto
+
+https://github.com/MLR062998/Proyecto-Dulce-Tradici-n-.git
+# Ejecuta el comando para despliegue
+
+npm install
+# Deten procesos de dfx que tengas iniciados, (en dado caso que no omite este comando):
+
+pkill dfx
+# Verifica los procesos detenidos de dfx:
+
+ps aux | grep dfx
+# Iniciar dfx:
+
+dfx start
+# Compilar canister
+
+dfx build
+# Desplegar:
+dfx deploy
+npm run dev
 
 Si ha realizado cambios en su contenedor backend, puede generar una nueva interfaz sincera con
 
@@ -59,13 +80,12 @@ Important
 
 Para el correcto funcionamiento de la plataforma en desarrollo es necesario Instalar estas librerias:
 
-#npm install react-router-dom
-#npm install react react-dom
+*npm install react-router-dom
+*npm install react react-dom
 #npm install reactstrap
 #npm install react-modal
 #npm install react-icons
 #npm install bootstrap
 #npm install style-loader css-loader --save-dev
 #npm install styled-components
-# Tecnologías utilizadas
-Los lenjuajes con los que se desarrollo es haciendo uso de Motoko y React.
+
