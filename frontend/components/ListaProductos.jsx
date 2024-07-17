@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCanister } from "@connect2ic/react";
 
+
 const ListaProductos = () => {
   const [dulcestradicionalesCanister] = useCanister("dulcestradicionalesCanister");
   const [productos, setProductos] = useState([]);

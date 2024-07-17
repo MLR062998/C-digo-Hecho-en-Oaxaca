@@ -2,7 +2,8 @@
   "canisters": {
     "dulcestradicionales_backend": {
       "main": "canisters/dulcestradicionales_backend/main.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "candid": "canisters/dulcestradicionales_backend/dulcestradicionales_backend.did"
     },
     "internet_identity": {
       "type": "custom",

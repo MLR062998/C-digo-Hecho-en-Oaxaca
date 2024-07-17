@@ -93,7 +93,17 @@ const Encabezado = () => {
         color: '#7A288A' // purple
       }}>
         HECHO EN OAXACA
+        <h1 style={{
+        margin: '0 auto',
+        fontSize: '0.5em',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#FA7268' // purple
+      }}>
+        Hecho a Mano, Hecho con Alma
       </h1>
+      </h1>
+
       <img src={logo} alt="Logo" style={{ height: '120px', marginBottom: '10px' }} />
     </div>
   );

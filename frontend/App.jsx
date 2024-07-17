@@ -12,8 +12,7 @@ import * as dulcesTradicionales from "../.dfx/local/canisters/dulcestradicionale
 // Importar componentes
 import CrearProducto from "./components/CrearProducto";
 import CrearUsuario from "./components/CrearUsuario";
-import { Encabezado } from "./components/Encabezado"; // Asegúrate de que Encabezado esté correctamente exportado en su archivo
-
+import { Encabezado } from "./components/Encabezado";  
 function App() {
   return (
     <div className="App">

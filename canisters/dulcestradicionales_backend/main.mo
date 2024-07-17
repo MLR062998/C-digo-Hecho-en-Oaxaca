@@ -1,70 +1,104 @@
 import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Nat "mo:base/Nat";
-import D "mo:base/Debug";
+import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
-import { stable_store, stable_restore } from "ic-cdk";
+import Int "mo:base/Int";
+import Principal "mo:base/Principal";
 
 // Backend del canister
-
 actor dulcestradicionalesCanister {
 
   type Usuario = {
     nombreu: Text;
     primerapellido: Text;
-    segundoapellido : Text;
-    telefono : Text;
+    segundoapellido: Text;
+    telefono: Text;
     canalesS: Text;
     direccion: Text;
     tipo: Text; // "productor" o "cliente"
   };
+  
   type Indice = Nat;
   var indiceusr: Indice = 0;
   let usuarios = HashMap.HashMap<Text, Usuario>(0, Text.equal, Text.hash);
 
-  private func generateIUser() : Nat {
+  private func generateIUser(): Nat {
     indiceusr += 1;
     return indiceusr;
   };
 
-  public func crearUsuarios(nombreu:Text, primerapellido:Text, segundoapellido:Text, telefono:Text, canalesS:Text, direccion:Text, tipo:Text) : async () {
-    let postuser = {nombreu = nombreu; primerapellido = primerapellido; segundoapellido = segundoapellido; telefono = telefono; canalesS = canalesS; direccion = direccion; tipo = tipo};
+  public func crearUsuarios(
+    nombreu: Text, 
+    primerapellido: Text, 
+    segundoapellido: Text, 
+    telefono: Text, 
+    canalesS: Text, 
+    direccion: Text, 
+    tipo: Text
+  ): async () {
+    let postuser = {
+      nombreu = nombreu;
+      primerapellido = primerapellido;
+      segundoapellido = segundoapellido;
+      telefono = telefono;
+      canalesS = canalesS;
+      direccion = direccion;
+      tipo = tipo;
+    };
 
     let clave = Nat.toText(generateIUser());
     usuarios.put(clave, postuser);
-    D.print("Nuevo Usuario Creado: " # nombreu);
+    Debug.print("Nuevo Usuario Creado: " # nombreu);
     return ();
   };
 
-  public func buscarUsuarios () : async [(Text, Usuario)] {
-    let userIter : Iter.Iter<(Text, Usuario)> = usuarios.entries();
-    let userArray : [(Text, Usuario)] = Iter.toArray(userIter);
+  public func buscarUsuarios(): async [(Text, Usuario)] {
+    let userIter: Iter.Iter<(Text, Usuario)> = usuarios.entries();
+    let userArray: [(Text, Usuario)] = Iter.toArray(userIter);
     return userArray;
   };
 
-  public func buscarUsuariosid (id: Text) : async ?Usuario {
+  public func buscarUsuariosid(id: Text): async ?Usuario {
     let user: ?Usuario = usuarios.get(id);
     return user;
   };
 
-  public func actualizarUsuario (id:Text, nombreu:Text, primerapellido:Text, segundoapellido:Text, telefono:Text, canalesS:Text, direccion:Text, tipo:Text) : async Bool {
-    let user: ?Usuario= usuarios.get(id);
+  public func actualizarUsuario(
+    id: Text, 
+    nombreu: Text, 
+    primerapellido: Text, 
+    segundoapellido: Text, 
+    telefono: Text, 
+    canalesS: Text, 
+    direccion: Text, 
+    tipo: Text
+  ): async Bool {
+    let user: ?Usuario = usuarios.get(id);
 
     switch (user) {
       case (null) {
         return false;
       };
       case (?currentuser) {
-        let user: Usuario = {nombreu = nombreu; primerapellido = primerapellido; segundoapellido = segundoapellido; telefono = telefono; canalesS = canalesS; direccion = direccion; tipo = tipo};
+        let user: Usuario = {
+          nombreu = nombreu;
+          primerapellido = primerapellido;
+          segundoapellido = segundoapellido;
+          telefono = telefono;
+          canalesS = canalesS;
+          direccion = direccion;
+          tipo = tipo;
+        };
         usuarios.put(id, user);
-        D.print("Ha sido actualizado el usuario con id: " # id);
+        Debug.print("Ha sido actualizado el usuario con id: " # id);
         return true;
       };
     };
   };
 
-  public func verificarCuentaUsuario(id:Text) : async Text {
+  public func verificarCuentaUsuario(id: Text): async Text {
     let user: ?Usuario = usuarios.get(id);
     if (user != null) {
       return "Cuenta de usuario verificada correctamente";
@@ -73,99 +107,150 @@ actor dulcestradicionalesCanister {
     }
   };
 
-  public func eliminarUsuario (id: Text) : async Bool {
-    let user : ?Usuario = usuarios.get(id);
+  public func eliminarUsuario(id: Text): async Bool {
+    let user: ?Usuario = usuarios.get(id);
     switch (user) {
       case (null) {
         return false;
       };
       case (_) {
         ignore usuarios.remove(id);
-        D.print("Ha sido eliminado el usuario con id: " # id);
+        Debug.print("Ha sido eliminado el usuario con id: " # id);
         return true;
       };
     };
   };
 
-
   type Productos = {
-    nombreProducto: Text;
-    idProducto: Text;
+    nombre: Text;
     descripcion: Text;
     precio: Text;
-    nombreArtesano: Text;
-    imagen: [Nat8];
+    reservacion: Text;
+    fecha: Text;
+    hora: Text;
   };
 
   type IndiceProd = Nat;
   var indiceprod: IndiceProd = 0;
   let productos = HashMap.HashMap<Text, Productos>(0, Text.equal, Text.hash);
 
-  private func generateIEvent() : Nat {
+  private func generateIEvent(): Nat {
     indiceprod += 1;
     return indiceprod;
   };
 
-  public func crearProductos(nombreProducto: Text, idProducto: Text, descripcion: Text, precio: Text, nombreArtesano: Text, imagen: [Nat8]) : async () {
+  public func crearProductos(
+    nombre: Text, 
+    descripcion: Text, 
+    precio: Text, 
+    reservacion: Text, 
+    fecha: Text, 
+    hora: Text
+  ): async () {
     let postevent = {
-      nombreProducto = nombreProducto;
-      idProducto = idProducto;
+      nombre = nombre;
       descripcion = descripcion;
       precio = precio;
-      nombreArtesano = nombreArtesano;
-      imagen = imagen;
+      reservacion = reservacion;
+      fecha = fecha;
+      hora = hora;
     };
 
     let clave = Nat.toText(generateIEvent());
     productos.put(clave, postevent);
-    D.print("Nuevo Producto Creado: " # nombreProducto);
-
-    // Guardar los datos en la memoria estable
-    stable_store([postevent]);
-
+    Debug.print("Nuevo Evento Creado: " # nombre);
     return ();
   };
 
-  public func buscarProductos() : async [(Text, Productos)] {
-    let productIter: Iter.Iter<(Text, Productos)> = productos.entries();
-    let productArray: [(Text, Productos)] = Iter.toArray(productIter);
-    return productArray;
-  };
+  public func actualizarProductos(
+    id: Text, 
+    nombre: Text, 
+    descripcion: Text, 
+    precio: Text, 
+    reservacion: Text, 
+    fecha: Text, 
+    hora: Text
+  ): async Bool {
+    let event: ?Productos = productos.get(id);
 
-  public func actualizarProductos(id: Text, nombreProducto: Text, descripcion: Text, precio: Text, nombreArtesano: Text, imagen: [Nat8]) : async Bool {
-    let producto: ?Productos = productos.get(id);
-
-    switch (producto) {
+    switch (event) {
       case (null) {
         return false;
       };
-      case (?currentProducto) {
-        let productoActualizado: Productos = {
-          nombreProducto = nombreProducto;
-          idProducto = idProducto;
+      case (?currentevent) {
+        let event: Productos = {
+          nombre = nombre;
           descripcion = descripcion;
           precio = precio;
-          nombreArtesano = nombreArtesano;
-          imagen = imagen;
+          reservacion = reservacion;
+          fecha = fecha;
+          hora = hora;
         };
-        productos.put(id, productoActualizado);
-        D.print("Producto actualizado con id: " # id);
+        productos.put(id, event);
+        Debug.print("Actualizado Producto con id: " # id);
         return true;
       };
     };
   };
 
-  public func eliminarProducto(id: Text) : async Bool {
-    let producto: ?Productos = productos.get(id);
-    switch (producto) {
+  public func identificacionProductos(id: Text): async Text {
+    let event: ?Productos = productos.get(id);
+    if (event != null) {
+      return "Productos identificado correctamente";
+    } else {
+      return "Productos no identificado";
+    };
+  };
+
+  public func autorizarProductos(id: Text): async Text {
+    let event: ?Productos = productos.get(id);
+    if (event != null) {
+      return "Productos autorizado correctamente";
+    } else {
+      return "Productos no autorizado";
+    }
+  };
+
+  public func buscarProductos(): async [(Text, Productos)] {
+    let eventIter: Iter.Iter<(Text, Productos)> = productos.entries();
+    let eventArray: [(Text, Productos)] = Iter.toArray(eventIter);
+    return eventArray;
+  };
+
+  public func buscarProductosid(id: Text): async ?Productos {
+    let event: ?Productos = productos.get(id);
+    return event;
+  };
+
+  public func eliminarProducto(id: Text): async Bool {
+    let event: ?Productos = productos.get(id);
+    switch (event) {
       case (null) {
         return false;
       };
       case (_) {
         ignore productos.remove(id);
-        D.print("Producto eliminado con id: " # id);
+        Debug.print("Ha sido eliminado el evento con id: " # id);
         return true;
       };
     };
+  };
+
+  public func calendarizacionProductos(id: Text): async Text {
+    let event: ?Productos = productos.get(id);
+    if (event != null) {
+      return "Productos calendarizado";
+    } else {
+      return "Productos no existente";
+    }
+  };
+
+  public func pagoProductos(id: Text): async Text {
+    let event: ?Productos = productos.get(id);
+    if (event != null) {
+      return "Pago realizado correctamente";
+    } else {
+      return "Pago no realizado por indice invalido";
+    }
   };
 };
